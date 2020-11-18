@@ -101,52 +101,13 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="jPanel1">
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPanel1MouseClicked"/>
-              </Events>
+            <Container class="javax.swing.JPanel" name="imgPanel">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="try {&#xd;&#xa;db();&#xd;&#xa;    myresObj = myStatObj.executeQuery(&quot;SELECT * from MMP.MyTable&quot;);&#xd;&#xa;    mymeta = myresObj.getMetaData();&#xd;&#xa;    int columnNo = mymeta.getColumnCount();&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;    JLabel[] pics = new JLabel[100];&#xd;&#xa;    JLabel[] picLabels = new JLabel[100];&#xd;&#xa;    int i = 0;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;    while(myresObj.next()){&#xd;&#xa;       &#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;         &#xd;&#xa;            String fileName = myresObj.getString(&quot;FILENAME&quot;);&#xd;&#xa;            InputStream is = myresObj.getBinaryStream(&quot;IMAGE&quot;); &#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;    //CREATE LABEL&#xd;&#xa;            pics[i] = new JLabel();&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;            picLabels[i] = new JLabel();&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;   &#xd;&#xa;            pics[i].setHorizontalTextPosition(JLabel.CENTER);&#xd;&#xa;            pics[i].setVerticalTextPosition(JLabel.BOTTOM);&#xd;&#xa;&#xd;&#xa;            pics[i].setMinimumSize(new Dimension(200, 200));&#xd;&#xa;            pics[i].setPreferredSize(new Dimension(200, 200));&#xd;&#xa;            pics[i].setMaximumSize(new Dimension(200, 200));&#xd;&#xa;            pics[i].setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));&#xd;&#xa;            pics[i].setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;     // Decode the inputstream as BufferedImage&#xd;&#xa;            try{&#xd;&#xa;                BufferedImage img=ImageIO.read(is);&#xd;&#xa;            &#xd;&#xa;        &#xd;&#xa;                Image imgIcon = img.getScaledInstance(200, 200, Image.SCALE_SMOOTH);&#xd;&#xa;&#xd;&#xa;&#xd;&#xa;                pics[i].setIcon(new ImageIcon(imgIcon));&#xd;&#xa;                picLabels[i].setText(fileName);&#xd;&#xa;&#xd;&#xa;                pics[i].addMouseListener(new java.awt.event.MouseAdapter() {&#xd;&#xa;                    public void mouseClicked(java.awt.event.MouseEvent evt) {&#xd;&#xa;                        System.out.println(&quot;clicked&quot;);&#xd;&#xa;                    };&#xd;&#xa;&#xd;&#xa;                });&#xd;&#xa;&#xd;&#xa;                imgPanel.add(pics[i]);&#xd;&#xa;                imgPanel.add(picLabels[i]);&#xd;&#xa;&#xd;&#xa;&#x9;&#xd;&#xa;               }catch(Exception e){&#xd;&#xa;&#x9;&#x9;System.out.println(e);&#xd;&#xa;            }&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;        i ++;&#xd;&#xa;    }    &#xd;&#xa;} catch (SQLException ex) {&#xd;&#xa;    ex.printStackTrace();&#xd;&#xa;    }"/>
+              </AuxValues>
 
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="pic1" min="-2" pref="200" max="-2" attributes="0"/>
-                              <Component id="pic1label" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="1107" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="pic1" min="-2" pref="200" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="pic1label" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="182" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="pic1">
-                  <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder thickness="3"/>
-                      </Border>
-                    </Property>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Hand Cursor"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pic1MouseClicked"/>
-                  </Events>
-                </Component>
                 <Component class="javax.swing.JLabel" name="pic1label">
                   <Properties>
                     <Property name="verifyInputWhenFocusTarget" type="boolean" value="false"/>
