@@ -1,8 +1,20 @@
 
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -22,10 +34,56 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Gui extends java.awt.Frame {
 
     /**
-     * Creates new form Gui
+     * Creates new form GU
      */
+     Connection myconObj;  // to connect DB
+     Statement myStatObj =null;  // to execute queries
+     ResultSet myresObj =null; // present the data fetch from queries
+   //  Statement stmt;          // Statement for static SQL Statement
+    PreparedStatement pstmt; //Prepared statment
+     ResultSetMetaData mymeta = null; // to process queries
+ 
     public Gui() {
         initComponents();
+    }
+    public void db(){
+         try {
+             myconObj = DriverManager.getConnection("jdbc:derby://localhost:1527/localDB", "MMP", "1234");
+             myStatObj = myconObj.createStatement();
+             myresObj = myStatObj.executeQuery("SELECT * from MMP.MyTable");
+             mymeta = myresObj.getMetaData();
+             System.out.println("Database connected"); 
+        
+             int columnNo = mymeta.getColumnCount();
+            //System.out.println(columnNo);
+            for(int i=1; i<=columnNo; i++){
+                System.out.print(mymeta.getColumnName(i)+ "\t");
+            }
+            
+            System.out.println();
+            while(myresObj.next()){
+                for(int i =1; i<=columnNo; i++){
+                    System.out.print(myresObj.getObject(i)+ "\t");
+                }
+                System.out.println();
+            }    
+         } catch (SQLException ex) {
+             ex.printStackTrace();
+         }
+    
+    }
+    /**
+     * @param args the command line arguments
+     */
+    //MAIN METHOD
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Gui().setVisible(true);
+            }
+        });
+
+       
     }
 
     /**
@@ -40,8 +98,7 @@ public class Gui extends java.awt.Frame {
         Title = new javax.swing.JLabel();
         ErrorMsg = new javax.swing.JLabel();
         DisplayScrollPane = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-        pic1 = new javax.swing.JLabel();
+        imgPanel = new javax.swing.JPanel();
         pic1label = new javax.swing.JLabel();
         functionPanel = new javax.swing.JPanel();
         Upload = new javax.swing.JButton();
@@ -61,44 +118,66 @@ public class Gui extends java.awt.Frame {
         ErrorMsg.setForeground(new java.awt.Color(255, 0, 0));
         ErrorMsg.setText("Error Message");
 
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel1MouseClicked(evt);
-            }
-        });
-
-        pic1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-        pic1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pic1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pic1MouseClicked(evt);
-            }
-        });
-
         pic1label.setVerifyInputWhenFocusTarget(false);
+        imgPanel.add(pic1label);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pic1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pic1label))
-                .addContainerGap(1107, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pic1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pic1label)
-                .addContainerGap(182, Short.MAX_VALUE))
-        );
+        DisplayScrollPane.setViewportView(imgPanel);
+        try {
+            db();
+            myresObj = myStatObj.executeQuery("SELECT * from MMP.MyTable");
+            mymeta = myresObj.getMetaData();
+            int columnNo = mymeta.getColumnCount();
 
-        DisplayScrollPane.setViewportView(jPanel1);
+            JLabel[] pics = new JLabel[100];
+            JLabel[] picLabels = new JLabel[100];
+            int i = 0;
+
+            while(myresObj.next()){
+
+                String fileName = myresObj.getString("FILENAME");
+                InputStream is = myresObj.getBinaryStream("IMAGE"); 
+
+                //CREATE LABEL
+                pics[i] = new JLabel();
+
+                picLabels[i] = new JLabel();
+
+                pics[i].setHorizontalTextPosition(JLabel.CENTER);
+                pics[i].setVerticalTextPosition(JLabel.BOTTOM);
+
+                pics[i].setMinimumSize(new Dimension(200, 200));
+                pics[i].setPreferredSize(new Dimension(200, 200));
+                pics[i].setMaximumSize(new Dimension(200, 200));
+                pics[i].setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+                pics[i].setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+                // Decode the inputstream as BufferedImage
+                try{
+                    BufferedImage img=ImageIO.read(is);
+
+                    Image imgIcon = img.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+
+                    pics[i].setIcon(new ImageIcon(imgIcon));
+                    picLabels[i].setText(fileName);
+
+                    pics[i].addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                            System.out.println("clicked");
+                        };
+
+                    });
+
+                    imgPanel.add(pics[i]);
+                    imgPanel.add(picLabels[i]);
+
+                }catch(Exception e){
+                    System.out.println(e);
+                }							
+                i ++;
+            }    
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -215,11 +294,28 @@ public class Gui extends java.awt.Frame {
     }//GEN-LAST:event_FilterActionPerformed
 
     private void AnnotateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnnotateActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    /*    java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new write().setVisible(true);
             }
         });
+*/
+     //Update filename
+        Scanner input = new Scanner (System.in);
+        String annotation = input.nextLine();
+            try {
+                db();
+                PreparedStatement annotate = myconObj.prepareStatement("UPDATE MMP.MyTable(FILENAME) VALUES(?)");
+                annotate.setString(2, annotation);
+                annotate.execute();
+                pic1label.setText(annotation);
+                System.out.println("Annotate successfully!");
+        
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println("Not successful.");
+            } 
+    
     }//GEN-LAST:event_AnnotateActionPerformed
 
     private void UploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UploadActionPerformed
@@ -228,47 +324,28 @@ public class Gui extends java.awt.Frame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter ("4 Extensions Supported","jpg","png","jpeg","gif");
         filechooser.setFileFilter(filter);
         int selected = filechooser.showOpenDialog(this);
+        
         if(selected == JFileChooser.APPROVE_OPTION){
             File file = filechooser.getSelectedFile();
             String getSelectedImage = file.getAbsolutePath();
             JOptionPane.showMessageDialog(null, getSelectedImage);
-            ImageIcon imIco = new ImageIcon (getSelectedImage);
-            //  make image fit 
-            Image imFit = imIco.getImage();
-            Image imIcoFit = imFit.getScaledInstance(pic1.getWidth(), pic1.getHeight(), Image.SCALE_SMOOTH);
-            pic1.setIcon(new ImageIcon(imIcoFit));
-            pic1label.setText(getSelectedImage);
-           
+         
+            //Storing image in database
+            try {
+                db();
+                PreparedStatement upload = myconObj.prepareStatement("INSERT INTO MMP.MyTable(FILENAME, IMAGE) VALUES(?, ?)");    
+                upload.setString(1, getSelectedImage);
+                FileInputStream img = new FileInputStream(getSelectedImage);
+                upload.setBlob(2, img);
+                upload.execute();
+               
+                
+            } catch (SQLException | FileNotFoundException ex) {
+                ex.printStackTrace();
+            }      
         }
     }//GEN-LAST:event_UploadActionPerformed
 
-    private void pic1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pic1MouseClicked
-             for (Component jc : pic1.getComponents()) {
-            if ( jc instanceof JLabel ) {
-                JLabel label = (JLabel) jc;
-                label.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 3));
-            }
-        }
-        pic1.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 3));
-    
-    
-    }//GEN-LAST:event_pic1MouseClicked
-
-    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jPanel1MouseClicked
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Gui().setVisible(true);
-            }
-        });
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -280,9 +357,8 @@ public class Gui extends java.awt.Frame {
     private javax.swing.JButton Upload;
     private javax.swing.JButton View;
     private javax.swing.JPanel functionPanel;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel imgPanel;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel pic1;
     private javax.swing.JLabel pic1label;
     // End of variables declaration//GEN-END:variables
 }
