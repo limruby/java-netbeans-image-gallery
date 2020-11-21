@@ -49,7 +49,9 @@ public class Gui extends java.awt.Frame {
  //    Statement stmt;          // Statement for static SQL Statement
     PreparedStatement pstmt; //Prepared statment
      ResultSetMetaData mymeta = null; // to process queries
- 
+    
+    public int selectedID;
+     
     public Gui() {
         initComponents();
     }
@@ -134,15 +136,17 @@ public class Gui extends java.awt.Frame {
 
             ArrayList<JLabel> pics = new ArrayList<>();
             ArrayList<JLabel> picsLabels = new ArrayList<>();
-            ArrayList<JPanel> boxPanels = new ArrayList<>(); 
+            ArrayList<JPanel> boxPanels = new ArrayList<>();
             ArrayList<JPanel> overlayPanels = new ArrayList<>();
+            ArrayList<JPanel> lovePanels = new ArrayList<>();
             int i = 0;
 
-            while(myresObj.next()){			
+            while(myresObj.next()){
 
+                int id = myresObj.getInt("ID");
                 String fileName = myresObj.getString("FILENAME");
                 String [] newFileName = fileName.split("\\\\");  
-                    InputStream is = myresObj.getBinaryStream("IMAGE"); 
+                    InputStream is = myresObj.getBinaryStream("IMAGE");
 
                     //CREATE LABEL
                     pics.add(new JLabel());
@@ -152,9 +156,7 @@ public class Gui extends java.awt.Frame {
                     boxPanels.add(new JPanel());
 
                     overlayPanels.add(new JPanel());
-
-                    pics.get(i).setHorizontalTextPosition(JLabel.CENTER);
-                    pics.get(i).setVerticalTextPosition(JLabel.BOTTOM);
+                    lovePanels.add(new JPanel());
 
                     pics.get(i).setMinimumSize(new Dimension(200, 200));
                     pics.get(i).setPreferredSize(new Dimension(200, 200));
@@ -169,40 +171,39 @@ public class Gui extends java.awt.Frame {
                         Image imgIcon = img.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 
                         pics.get(i).setIcon(new ImageIcon(imgIcon));
-                        picsLabels.get(i).setText(newFileName[newFileName.length-1]);
-                        pics.get(i).setAlignmentX(0.8F);
-                        pics.get(i).setAlignmentY(0.1F);
+                        picsLabels.get(i).setText(newFileName[newFileName.length-1]); 
 
                         pics.get(i).addMouseListener(new java.awt.event.MouseAdapter() {
                             public void mouseClicked(java.awt.event.MouseEvent evt) {
                                 JLabel labelSc = (JLabel) evt.getSource();
-                                Component[] overLayComponents = imgPanel.getComponents();
+                                Component[] boxComponents = imgPanel.getComponents();
+                                for (int m = 0; m < boxComponents.length; m++) {
+                                    JPanel panel = (JPanel) boxComponents[m];
+                                    Component[] overLayComponents = panel.getComponents();
+                                    for (int n = 0; n < overLayComponents.length; n++) {
+                                        if ((overLayComponents[n] instanceof JPanel)) {
+                                            JPanel panel2 = (JPanel) overLayComponents[n];
 
-                                for (int i = 0; i < overLayComponents.length; i++) {
-                                    JPanel panel = (JPanel) overLayComponents[i];
-                                    Component[] components = panel.getComponents();
-                                    for (int j = 0; j < components.length; j++) {
-                                        if ((components[j] instanceof JLabel)) {
-                                            JLabel label = (JLabel) components[j];
-                                            if((LineBorder)label.getBorder()!=null){
-                                                label.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 3));
+                                            Component[] components = panel2.getComponents();
+                                            for (int o = 0; o < components.length; o++) {
+                                                if ((components[o] instanceof JLabel)) {
+                                                    JLabel label = (JLabel) components[o];
+                                                    if((LineBorder)label.getBorder()!=null){
+                                                        label.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 3));
+                                                    }
+
+                                                }
                                             }
-
                                         }
-                                    }   
-
-                                }   
-
-                                labelSc.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 3));
-                                //SELECT DB ROW
-                                try{
-                                    Statement stmt = myconObj.createStatement();
-                                    ResultSet rs = stmt.executeQuery("SELECT * FROM MYTABLE");
-                                    rs.getRow();
-                                    System.out.println(rs.getRow()+ " is selected.");
-                                }catch(Exception e){
-                                    e.printStackTrace();
+                                    }
                                 }
+                                labelSc.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 3));
+
+                                //SELECT DB ROW
+
+                                System.out.println( id+" is selected.");
+                                selectedID = id;
+
                             };
 
                         });
@@ -210,9 +211,11 @@ public class Gui extends java.awt.Frame {
                         //create loveSymbol if myresObj.getBoolean("anotated") = TRUE
 
                         JLabel loveSign = new JLabel();
-                        loveSign.setText("\u2764");
+                        loveSign.setText("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2764<br/><br/><br/><br/> </html>");
                         loveSign.setFont(new java.awt.Font("monospaced", 1, 40));
                         loveSign.setForeground(Color.RED);
+                        loveSign.setForeground(Color.RED);
+                        loveSign.setAlignmentX(0.02f);
 
                         boxPanels.get(i).setLayout(new BoxLayout(boxPanels.get(i), BoxLayout.Y_AXIS));
                         overlayPanels.get(i).setLayout(new OverlayLayout(overlayPanels.get(i)));
@@ -224,9 +227,9 @@ public class Gui extends java.awt.Frame {
 
                     }catch(Exception e){
                         System.out.println(e);
-                    }							
+                    }
                     i ++;
-                }    
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -349,7 +352,7 @@ public class Gui extends java.awt.Frame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new write().setVisible(true);
+                new write(selectedID).setVisible(true);
             }
         });
     }//GEN-LAST:event_AnnotateActionPerformed
@@ -369,13 +372,11 @@ public class Gui extends java.awt.Frame {
             //Storing image in database
             try {
                 db();
-                PreparedStatement upload = myconObj.prepareStatement("INSERT INTO MMP.MyTable(FILENAME, IMAGE) VALUES(?, ?)");    
+                PreparedStatement upload = myconObj.prepareStatement("INSERT INTO MMP.MyTable(FILENAME,IMAGE) VALUES(?, ?)");       
                 upload.setString(1, getSelectedImage);
                 FileInputStream img = new FileInputStream(getSelectedImage);
-                upload.setBlob(2, img);
-                upload.execute();
-               
-                
+                upload.setBlob(2, img); 
+                upload.execute();            
             } catch (SQLException | FileNotFoundException ex) {
                 ex.printStackTrace();
                

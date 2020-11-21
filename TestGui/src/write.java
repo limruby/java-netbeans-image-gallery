@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,9 +31,13 @@ public class write extends java.awt.Frame {
    //  Statement stmt;          // Statement for static SQL Statement
     PreparedStatement pstmt; //Prepared statment
      ResultSetMetaData mymeta = null; // to process queries
-     
-    public write() {
+     static int selectedID;
+ 
+    
+    public write(int selectedID) {
+        this.selectedID = selectedID;
         initComponents();
+        
     }
 
     public void db(){
@@ -73,7 +78,7 @@ public class write extends java.awt.Frame {
         jLabel1 = new javax.swing.JLabel();
         textInput = new javax.swing.JTextField();
         addText = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        dlText = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -91,7 +96,12 @@ public class write extends java.awt.Frame {
             }
         });
 
-        jButton2.setText("Delete");
+        dlText.setText("Delete");
+        dlText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dlTextActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -108,7 +118,7 @@ public class write extends java.awt.Frame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addText)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(dlText)
                         .addGap(26, 26, 26))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -118,11 +128,27 @@ public class write extends java.awt.Frame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(addText)
-                    .addComponent(jButton2))
+                    .addComponent(dlText))
                 .addGap(18, 18, 18)
                 .addComponent(textInput, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(46, Short.MAX_VALUE))
         );
+
+        try {
+            db();
+            myresObj = myStatObj.executeQuery("SELECT ANNOTATION from MMP.MyTable WHERE ID = "+selectedID);
+            mymeta = myresObj.getMetaData();
+            int columnNo = mymeta.getColumnCount();
+
+            while(myresObj.next()){
+
+                String pastAnnotation = myresObj.getString("ANNOTATION");
+                textInput.setText(pastAnnotation);
+
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -146,44 +172,45 @@ public class write extends java.awt.Frame {
     }//GEN-LAST:event_exitForm
 
     private void addTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTextActionPerformed
-        // TODO add your handling code here:
-      
-        //Add annotation
-        
-        String annotation = textInput.getText();
-            try {
+      //Add annotation
+     
+           try {
                 db();
-                String query = "UPDATE MYTABLE SET ANNOTATION ="+ annotation; //WHERE ID EQUALS TO 
+                 String annotation = textInput.getText();
+                String query =  "UPDATE MYTABLE SET ANNOTATION = '"+ annotation + "' WHERE ID = " + selectedID; 
                 PreparedStatement annotate = myconObj.prepareStatement(query);
-                annotate.setString(3, annotation);
                 annotate.execute();
                 System.out.println("Annotate successfully!");
         
-            } catch (SQLException ex) {
-                
+            } catch (SQLException ex) { 
                 ex.printStackTrace();
                 System.out.println("Not successful.");    
-            } 
+            }
         
     }//GEN-LAST:event_addTextActionPerformed
+
+    private void dlTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dlTextActionPerformed
+       try {
+                db();
+                String query = "UPDATE MYTABLE SET ANNOTATION = NULL WHERE ID = " + selectedID; 
+                PreparedStatement del = myconObj.prepareStatement(query);
+                del.execute();
+                System.out.println("Annotate successfully!");
+        
+            } catch (SQLException ex) { 
+                ex.printStackTrace();
+                System.out.println("Not successful.");    
+            }
+    }//GEN-LAST:event_dlTextActionPerformed
   
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        //if one image was selected
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new write().setVisible(true);
-            }
-        });
-    }
-
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addText;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton dlText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField textInput;
