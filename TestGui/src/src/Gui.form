@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.FrameFormInfo">
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="exitForm"/>
+  </Events>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="functionPanel" min="-2" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="functionPanel" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel3" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanel3">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="Title" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="ErrorMsg" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="913" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="DisplayScrollPane" min="-2" pref="974" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="Title" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                  <Component id="DisplayScrollPane" min="-2" pref="435" max="-2" attributes="0"/>
+                  <EmptySpace pref="48" max="32767" attributes="0"/>
+                  <Component id="ErrorMsg" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="Title">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Title"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="ErrorMsg">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Error Message"/>
+          </Properties>
+        </Component>
+        <Container class="javax.swing.JScrollPane" name="DisplayScrollPane">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Container class="javax.swing.JPanel" name="imgPanel">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="try {&#xd;&#xa; db();&#xd;&#xa;     myresObj = myStatObj.executeQuery(&quot;SELECT * from MMP.MyTable&quot;);&#xd;&#xa;     mymeta = myresObj.getMetaData();&#xd;&#xa;     int columnNo = mymeta.getColumnCount();&#xd;&#xa;     &#xd;&#xa;&#xd;&#xa;     ArrayList&lt;JLabel&gt; pics = new ArrayList&lt;&gt;();&#xd;&#xa;     ArrayList&lt;JLabel&gt; picsLabels = new ArrayList&lt;&gt;();&#xd;&#xa;     ArrayList&lt;JPanel&gt; boxPanels = new ArrayList&lt;&gt;(); &#xd;&#xa;     ArrayList&lt;JPanel&gt; overlayPanels = new ArrayList&lt;&gt;();&#xd;&#xa;     int i = 0;&#xd;&#xa;&#xd;&#xa;     while(myresObj.next()){&#x9;&#x9;&#x9;&#xd;&#xa;          &#xd;&#xa;             String fileName = myresObj.getString(&quot;FILENAME&quot;);&#xd;&#xa;             String [] newFileName = fileName.split(&quot;\\\\&quot;);  &#xd;&#xa;             InputStream is = myresObj.getBinaryStream(&quot;IMAGE&quot;); &#xd;&#xa; &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;     //CREATE LABEL&#xd;&#xa;             pics.add(new JLabel());&#xd;&#xa; &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;             picsLabels.add(new JLabel());&#xd;&#xa;&#xd;&#xa;             boxPanels.add(new JPanel());&#xd;&#xa;&#xd;&#xa;             overlayPanels.add(new JPanel());&#xd;&#xa; &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;   &#xd;&#xa;             pics.get(i).setHorizontalTextPosition(JLabel.CENTER);&#xd;&#xa;             pics.get(i).setVerticalTextPosition(JLabel.BOTTOM);&#xd;&#xa; &#xd;&#xa;             pics.get(i).setMinimumSize(new Dimension(200, 200));&#xd;&#xa;             pics.get(i).setPreferredSize(new Dimension(200, 200));&#xd;&#xa;             pics.get(i).setMaximumSize(new Dimension(200, 200));&#xd;&#xa;             pics.get(i).setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));&#xd;&#xa;             pics.get(i).setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));&#xd;&#xa; &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;      // Decode the inputstream as BufferedImage&#xd;&#xa;             try{&#xd;&#xa;                 BufferedImage img=ImageIO.read(is);&#xd;&#xa;             &#xd;&#xa;         &#xd;&#xa;                 Image imgIcon = img.getScaledInstance(200, 200, Image.SCALE_SMOOTH);&#xd;&#xa; &#xd;&#xa; &#xd;&#xa;                 pics.get(i).setIcon(new ImageIcon(imgIcon));&#xd;&#xa;                  picsLabels.get(i).setText(newFileName[newFileName.length-1]);&#xd;&#xa; &#xd;&#xa;                pics.get(i).addMouseListener(new java.awt.event.MouseAdapter() {&#xd;&#xa;                     public void mouseClicked(java.awt.event.MouseEvent evt) {&#xd;&#xa;                        JLabel labelSc = (JLabel) evt.getSource();&#xd;&#xa;                        Component[] overLayComponents = imgPanel.getComponents();&#xd;&#xa;&#xd;&#xa;                        for (int i = 0; i &lt; overLayComponents.length; i++) {&#xd;&#xa;                            JPanel panel = (JPanel) overLayComponents[i];&#xd;&#xa;                             Component[] components = panel.getComponents();&#xd;&#xa;                            for (int j = 0; j &lt; components.length; j++) {&#xd;&#xa;                                    if ((components[j] instanceof JLabel)) {&#xd;&#xa;                                         JLabel label = (JLabel) components[j];&#xd;&#xa;                                         if((LineBorder)label.getBorder()!=null){&#xd;&#xa;                                            label.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 3));&#xd;&#xa;                                        }&#xd;&#xa;                                        &#xd;&#xa;                                    }&#xd;&#xa;                             }   &#xd;&#xa;                           &#xd;&#xa;                        }   &#xd;&#xa;&#xd;&#xa;                     labelSc.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 3));&#xd;&#xa;                     //SELECT DB ROW&#xd;&#xa;                     try{&#xd;&#xa;                         Statement stmt = myconObj.createStatement();&#xd;&#xa;                         ResultSet rs = stmt.executeQuery(&quot;SELECT * FROM MYTABLE&quot;);&#xd;&#xa;                         rs.getRow();&#xd;&#xa;                         System.out.println(rs.getRow()+ &quot; is selected.&quot;);&#xd;&#xa;                         }catch(Exception e){&#xd;&#xa;                            e.printStackTrace();&#xd;&#xa;                         }&#xd;&#xa;                     };&#xd;&#xa; &#xd;&#xa;                 });&#xd;&#xa;&#xd;&#xa;&#xd;&#xa;                 //create loveSymbol if myresObj.getBoolean(&quot;anotated&quot;) = TRUE&#xd;&#xa;                 &#xd;&#xa;                    JLabel loveSign = new JLabel();&#xd;&#xa;                    loveSign.setText(&quot;\u2764&quot;);&#xd;&#xa;                    loveSign.setFont(new java.awt.Font(&quot;monospaced&quot;, 1, 40));&#xd;&#xa;                    loveSign.setForeground(Color.RED);&#xd;&#xa;&#xd;&#xa;                 boxPanels.get(i).setLayout(new BoxLayout(boxPanels.get(i), BoxLayout.Y_AXIS));&#xd;&#xa;                 overlayPanels.get(i).setLayout(new OverlayLayout(overlayPanels.get(i)));&#xd;&#xa;                 overlayPanels.get(i).add(loveSign);&#xd;&#xa;                 overlayPanels.get(i).add(pics.get(i));&#xd;&#xa;                 boxPanels.get(i).add(overlayPanels.get(i));&#xd;&#xa;                 boxPanels.get(i).add(picsLabels.get(i));&#xd;&#xa;                 imgPanel.add(boxPanels.get(i));&#xd;&#xa;                &#xd;&#xa; &#x9;&#xd;&#xa;                }catch(Exception e){&#xd;&#xa; &#x9;&#x9;System.out.println(e);&#xd;&#xa;             }&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xd;&#xa;         i ++;&#xd;&#xa;     }    &#xd;&#xa; } catch (SQLException ex) {&#xd;&#xa;     ex.printStackTrace();&#xd;&#xa;     }"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="3"/>
+                <Property name="rows" type="int" value="0"/>
+              </Layout>
+            </Container>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="functionPanel">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="Annotate" linkSize="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="Upload" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="View" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="Filter" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="46" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="Upload" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="Annotate" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="View" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="Filter" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="Upload">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Upload"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="UploadActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="Annotate">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Anotate"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AnnotateActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="View">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="View"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="Filter">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Filter"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FilterActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>
