@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.2" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.FrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.FrameFormInfo">
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
@@ -50,7 +50,7 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="addText" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                          <Component id="dlText" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -64,7 +64,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="addText" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="dlText" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="textInput" min="-2" pref="122" max="-2" attributes="0"/>
@@ -83,6 +83,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textInput">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="try {&#xd;&#xa;            db();&#xd;&#xa;            myresObj = myStatObj.executeQuery(&quot;SELECT ANNOTATION from MMP.MyTable WHERE ID = &quot;+selectedID);&#xd;&#xa;            mymeta = myresObj.getMetaData();&#xd;&#xa;            int columnNo = mymeta.getColumnCount();&#xd;&#xa;&#xd;&#xa;            while(myresObj.next()){&#xd;&#xa;&#xd;&#xa;                String pastAnnotation = myresObj.getString(&quot;ANNOTATION&quot;);&#xd;&#xa;                textInput.setText(pastAnnotation);&#xd;&#xa;&#xd;&#xa;            }&#xd;&#xa;        } catch (SQLException ex) {&#xd;&#xa;            ex.printStackTrace();&#xd;&#xa;        }"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="addText">
           <Properties>
@@ -92,10 +95,13 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addTextActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="dlText">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dlTextActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
