@@ -1,6 +1,6 @@
 # java-netbeans-image-gallery
 
-Purpose
+## Purpose
 The purpose of this assignment is to develop a GUI for users to select a particular image from their personal collections, and display it in the interface. The selected photos are then stored in a database. The interface must also provide a feature, for instance a text field, to enable users to annotate each displayed photo with words for memorabilia. The program must then store the words in the database alongside the corresponding photo.
 
 For each of photos that have been annotated, a tiny love sign symbol (♥) colored in red is inserted at the top right corner of the image. This sign would indicate that the photo has been annotated. Photos in the database that have not yet annotated will not have the sign.
